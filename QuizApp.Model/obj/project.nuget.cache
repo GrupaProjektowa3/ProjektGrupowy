@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "3eXJZnAX9dcoB3AVhRCvcyU0mw62qnJhET23p1EGrrTp4NkiUqQ6fhYjbOvPW1cd42axp2TXlwN4Mg5H3UpDRw==",
+  "success": true,
+  "projectFilePath": "D:\\Study\\7semestr\\PZD\\QuizAppv3\\QuizApp.Model\\QuizApp.Model.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.3\\microsoft.aspnetcore.cryptography.internal.5.0.3.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.3\\microsoft.aspnetcore.cryptography.keyderivation.5.0.3.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\5.0.0\\microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.0\\microsoft.extensions.dependencyinjection.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.identity.core\\5.0.3\\microsoft.extensions.identity.core.5.0.3.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.identity.stores\\5.0.3\\microsoft.extensions.identity.stores.5.0.3.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.logging\\5.0.0\\microsoft.extensions.logging.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.options\\5.0.0\\microsoft.extensions.options.5.0.0.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

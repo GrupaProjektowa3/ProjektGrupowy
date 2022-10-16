@@ -1,0 +1,12 @@
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\bin\Debug\net5.0\QuizApp.Model.deps.json
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\bin\Debug\net5.0\QuizApp.Model.dll
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\bin\Debug\net5.0\QuizApp.Model.pdb
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.csproj.AssemblyReference.cache
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.AssemblyInfoInputs.cache
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.AssemblyInfo.cs
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.csproj.CoreCompileInputs.cache
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.dll
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\refint\QuizApp.Model.dll
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\QuizApp.Model.pdb
+D:\Study\7semestr\PZD\QuizAppv3\QuizApp.Model\obj\Debug\net5.0\ref\QuizApp.Model.dll
