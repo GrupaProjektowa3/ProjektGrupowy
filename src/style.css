@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.btn {
+  border-radius: 20px !important;
+}
+.login-form {
+  height: 100vh;
+}
+
+.login-form .btn {
+  color: white !important;
+}
+
+.login-btn {
+  background-color: #1d4645 !important ;
+}
+
+.register-btn {
+  background-color: #245856 !important;
+}
+
+.login-text {
+  font-size: 40px;
+  color: #1d5f4f;
+  font-weight: bold;
+}
+
+.logo {
+  height: 30px;
+  width: auto;
+}
+
+.hero p:first-child {
+  color: #1d4645;
+}

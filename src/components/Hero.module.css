@@ -1,0 +1,35 @@
+.play {
+  color: #1d4645;
+  font-size: 72px;
+  font-weight: bold;
+}
+
+.rank_info {
+  font-size: 25px;
+}
+
+.input {
+  border-radius: 10px !important;
+}
+
+.button {
+  background-color: #fff2e6;
+  border-radius: 10px !important;
+  font-weight: bold;
+}
+
+.something {
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.players {
+  color: #1d4645;
+  font-size: 55px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.container {
+  margin-top: 15vh;
+}
