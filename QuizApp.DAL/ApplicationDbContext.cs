@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace QuizApp.DAL
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, int>
+    //public class ApplicationDbContext : IdentityDbContext<User, Role, int>
+    public class ApplicationDbContext : DbContext
     {
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<LoggedInUser> Users { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
@@ -26,12 +28,13 @@ namespace QuizApp.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            /*
             modelBuilder.Entity<User>()
             .ToTable("AspNetUsers")
             .HasDiscriminator<int>("UserType")
             .HasValue<User>((int)RoleValue.User)
             .HasValue<LoggedInUser>((int)RoleValue.LoggedInUser);
-
+            */
             modelBuilder.Entity<Question>()
                 .HasMany(c => c.Answers)
                 .WithOne(x => x.Question)

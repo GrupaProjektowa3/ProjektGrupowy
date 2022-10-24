@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using QuizApp.Model;
 using System.Globalization;
 using QuizApp.DAL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace QuizApp.Web
 {
@@ -32,15 +33,16 @@ namespace QuizApp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) //here you can define a database type.
             );
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddRoles<Role>()
-                .AddRoleManager<RoleManager<Role>>()
-                .AddUserManager<UserManager<User>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
             //services.AddTransient<IService, Service>();
             services.Configure<RequestLocalizationOptions>(options =>
@@ -78,8 +80,6 @@ namespace QuizApp.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            var localizationOption = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-            app.UseRequestLocalization(localizationOption?.Value);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

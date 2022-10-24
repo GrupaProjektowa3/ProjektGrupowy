@@ -29,4 +29,6 @@
     <ProjectReference Include="..\QuizApp.Model\QuizApp.Model.csproj" />
     <ProjectReference Include="..\QuizApp.Services\QuizApp.Services.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using QuizApp.DAL;
 using QuizApp.Model;
 
@@ -12,7 +16,7 @@ namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController: ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -20,6 +24,7 @@ namespace QuizApp.Api.Controllers
         {
             _context = context;
         }
+
 
         // GET: api/Categories
         [HttpGet]
@@ -51,7 +56,6 @@ namespace QuizApp.Api.Controllers
         }
 
         // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
@@ -62,8 +66,6 @@ namespace QuizApp.Api.Controllers
                 {
                     category1.Name = category.Name;
                     category1.Description = category.Description;
-                    category1.Questions = category.Questions;
-                    category1.Grades = category.Grades;
                     _context.Categories.Update(category1);
                     await _context.SaveChangesAsync();
                     return Ok();
@@ -84,13 +86,15 @@ namespace QuizApp.Api.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
+            var currentUser = GetCurrentUser();
             try
             {
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
-                return Ok();
+                return Ok("$Hi admin");
             }
             catch (Exception ex)
             {
@@ -112,6 +116,29 @@ namespace QuizApp.Api.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex);
+            }
+        }
+
+        private LoggedInUser GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if(identity != null)
+            {
+                var userClaims = identity.Claims;
+
+                return new LoggedInUser
+                {
+                    FirstName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value,
+                    EmailAdress = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    UserName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
+                    RoleValue = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value,
+                };
+            }
+            else
+            {
+                return null;
             }
         }
     }

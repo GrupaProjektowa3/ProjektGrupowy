@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JrjTYAuPwJzmhbCL+JMELHswKFgjVZl0scU74HTkRIUgJHFZ3Jrl/9VWLaQpTEHTVDNcT7z7/Dxs48Cn8u+03Q==",
+  "dgSpecHash": "MqcsZFxnTjh5FVYj7TSe3ZupKy7QTwUm1t88WhxkCu9N7We8oDRNRK7X/L2ZQ/Qan+jDt2TodTbjaVkojh7uXQ==",
   "success": true,
   "projectFilePath": "D:\\Study\\7semestr\\PZD\\QuizAppv3\\QuizApp.DAL\\QuizApp.DAL.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\5.0.3\\microsoft.entityframeworkcore.proxies.5.0.3.nupkg.sha512",
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\5.0.3\\microsoft.entityframeworkcore.relational.5.0.3.nupkg.sha512",
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\5.0.3\\microsoft.entityframeworkcore.sqlserver.5.0.3.nupkg.sha512",
+    "C:\\Users\\Stark\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\5.0.3\\microsoft.entityframeworkcore.tools.5.0.3.nupkg.sha512",
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\5.0.0\\microsoft.extensions.caching.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.caching.memory\\5.0.0\\microsoft.extensions.caching.memory.5.0.0.nupkg.sha512",
     "C:\\Users\\Stark\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
