@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using QuizApp.DAL;
 using QuizApp.Model;
 
@@ -17,23 +14,24 @@ namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController: ControllerBase
+    public class LoggedInUsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public LoggedInUsersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-
-        // GET: api/Categories
+        // GET: api/LoggedInUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<LoggedInUser>>> GetUsers()
         {
             try
             {
-                return Ok(await _context.Categories.ToListAsync());
+                var currentUser = GetCurrentUser();
+                return Ok(await _context.Users.ToListAsync());
             }
             catch (Exception ex)
             {
@@ -41,14 +39,16 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // GET: api/Categories/5
+        // GET: api/LoggedInUsers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<LoggedInUser>> GetLoggedInUser(int id)
         {
             try
             {
-                var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-                return Ok(category);
+                var currentUser = GetCurrentUser();
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                return Ok(user);
             }
             catch (ArgumentNullException ex)
             {
@@ -56,26 +56,26 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // PUT: api/Categories/5
+        // PUT: api/LoggedInUsers/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public async Task<IActionResult> PutLoggedInUser(int id, LoggedInUser loggedInUser)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                Category category1 = _context.Categories.FirstOrDefault(x => x.Id == id);
-                if (category1 != null)
+                LoggedInUser user1 = _context.Users.FirstOrDefault(x => x.Id == id);
+                if (user1 != null)
                 {
-                    category1.Name = category.Name;
-                    category1.Description = category.Description;
-                    _context.Categories.Update(category1);
+                    user1.RoleValue = loggedInUser.UserName;
+                    _context.Users.Update(user1);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
                 else
                 {
-                    _context.Categories.Add(category);
+                    _context.Users.Add(loggedInUser);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -86,17 +86,18 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // POST: api/Categories
+        // POST: api/LoggedInUsers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<LoggedInUser>> PostLoggedInUser(LoggedInUser loggedInUser)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                _context.Categories.Add(category);
+                _context.Users.Add(loggedInUser);
                 await _context.SaveChangesAsync();
-                return Ok("$Hi admin");
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -104,16 +105,16 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // DELETE: api/Categories/5
+        // DELETE: api/LoggedInUsers/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteLoggedInUser(int id)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-                _context.Categories.Remove(category);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -122,12 +123,11 @@ namespace QuizApp.Api.Controllers
                 return NotFound(ex);
             }
         }
-
         private LoggedInUser GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            if(identity != null)
+            if (identity != null)
             {
                 var userClaims = identity.Claims;
 

@@ -11,7 +11,11 @@ namespace QuizApp.Model
     {
         [Key]
         public int Id { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string FirstName { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string LastName { get; set; }
         public DateTime? RegistrationDate { get; set; }
     }

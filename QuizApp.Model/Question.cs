@@ -13,6 +13,7 @@ namespace QuizApp.Model
         [Key]
         public int Id { get; set; }
         [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
         public virtual List<Answer> Answers { get; set; }
         public virtual Category Category { get; set; }

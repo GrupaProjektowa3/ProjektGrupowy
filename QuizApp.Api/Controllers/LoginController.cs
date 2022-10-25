@@ -4,24 +4,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using QuizApp.DAL;
 using QuizApp.Model;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginConroller : ControllerBase
+    public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
+        private readonly ApplicationDbContext _context;
 
-        public LoginConroller(IConfiguration config)
+        public LoginController(IConfiguration config, ApplicationDbContext context)
         {
             _config = config;
+            _context = context;
         }
 
         [AllowAnonymous]
@@ -64,7 +68,16 @@ namespace QuizApp.Api.Controllers
 
         private LoggedInUser Authenticate(UserLogin userLogin)
         {
-            var currentUser = UserConstans.LoggedInUsers.FirstOrDefault(x => x.UserName.ToLower() == userLogin.UserName.ToLower() && x.Password == userLogin.Password);
+            SHA256 sha256 = SHA256.Create();
+            byte[] b = Encoding.ASCII.GetBytes(userLogin.Password);
+            byte[] hash = sha256.ComputeHash(b);
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in hash)
+            {
+                sb.Append(item.ToString("X2"));
+            }
+            userLogin.Password = Convert.ToString(sb);
+            var currentUser = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == userLogin.UserName.ToLower() && x.Password == userLogin.Password);
             if (currentUser != null)
             {
                 return currentUser;

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,10 +55,12 @@ namespace QuizApp.Api.Controllers
 
         // PUT: api/Answers/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAnswer(int id, Answer answer)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 Answer answer1 = _context.Answers.FirstOrDefault(x => x.Id == id);
                 if (answer1 != null)
                 {
@@ -80,10 +85,12 @@ namespace QuizApp.Api.Controllers
 
         // POST: api/Answers
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Answer>> PostAnswer(Answer answer)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 _context.Answers.Add(answer);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -96,10 +103,12 @@ namespace QuizApp.Api.Controllers
 
         // DELETE: api/Answers/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAnswer(int id)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 var answer = await _context.Answers.FirstOrDefaultAsync(x => x.Id == id);
                 _context.Answers.Remove(answer);
                 await _context.SaveChangesAsync();
@@ -108,6 +117,29 @@ namespace QuizApp.Api.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex);
+            }
+        }
+
+        private LoggedInUser GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+
+                return new LoggedInUser
+                {
+                    FirstName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value,
+                    EmailAdress = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    UserName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
+                    RoleValue = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value,
+                };
+            }
+            else
+            {
+                return null;
             }
         }
     }
