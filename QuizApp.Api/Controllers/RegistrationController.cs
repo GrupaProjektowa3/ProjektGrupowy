@@ -27,7 +27,7 @@ namespace QuizApp.Api.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<Category>> PostUser(LoggedInUser user)
+        public async Task<ActionResult<User>> PostUser(LoggedInUser user)
         {
             try
             {
