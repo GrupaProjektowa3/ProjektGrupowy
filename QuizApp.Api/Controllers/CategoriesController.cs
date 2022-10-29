@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using QuizApp.DAL;
 using QuizApp.Model;
 
@@ -42,6 +43,7 @@ namespace QuizApp.Api.Controllers
         }
 
         // GET: api/Categories/5
+        /*
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
@@ -49,6 +51,20 @@ namespace QuizApp.Api.Controllers
             {
                 var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
                 return Ok(category);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound(ex);
+            }
+        }
+        */
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Category>> GetCategory(string name)
+        {
+            try
+            {
+                return Ok(_context.Categories.Where(x => x.Name.Contains(name)));
             }
             catch (ArgumentNullException ex)
             {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,10 +25,12 @@ namespace QuizApp.Api.Controllers
 
         // GET: api/Grades
         [HttpGet]
+        [Authorize(Roles = "Admin, LoggedInUser")]
         public async Task<ActionResult<IEnumerable<Grade>>> GetGrades()
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 return Ok(await _context.Grades.ToListAsync());
             }
             catch (Exception ex)
@@ -37,10 +41,12 @@ namespace QuizApp.Api.Controllers
 
         // GET: api/Grades/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, LoggedInUser")]
         public async Task<ActionResult<Grade>> GetGrade(int id)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == id);
                 return Ok(grade);
             }
@@ -53,10 +59,12 @@ namespace QuizApp.Api.Controllers
         // PUT: api/Grades/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutGrade(int id, Grade grade)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 Grade grade1 = _context.Grades.FirstOrDefault(x => x.Id == id);
                 if (grade1 != null)
                 {
@@ -90,10 +98,12 @@ namespace QuizApp.Api.Controllers
         // POST: api/Grades
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin, LoggedInUser")]
         public async Task<ActionResult<Grade>> PostGrade(Grade grade)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 _context.Grades.Add(grade);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -106,10 +116,12 @@ namespace QuizApp.Api.Controllers
 
         // DELETE: api/Grades/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteGrade(int id)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == id);
                 _context.Grades.Remove(grade);
                 await _context.SaveChangesAsync();
@@ -118,6 +130,29 @@ namespace QuizApp.Api.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex);
+            }
+        }
+
+        private LoggedInUser GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+
+                return new LoggedInUser
+                {
+                    FirstName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Surname)?.Value,
+                    EmailAdress = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    UserName = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
+                    RoleValue = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value,
+                };
+            }
+            else
+            {
+                return null;
             }
         }
     }
