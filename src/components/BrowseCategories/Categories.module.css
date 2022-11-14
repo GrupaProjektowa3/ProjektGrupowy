@@ -1,0 +1,19 @@
+.cat_text {
+  color: #1d4645;
+  font-size: 66px;
+  font-weight: bold;
+}
+
+.dropdown {
+  color: #1d4645 !important;
+  border-radius: 10px !important;
+  background-color: white;
+}
+.dropdown:hover {
+  color: black !important;
+  background-color: #b8adad;
+}
+
+/* .bg_FFF2E6 {
+  background-color: #fff2e6 !important;
+} */

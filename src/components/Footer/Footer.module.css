@@ -1,0 +1,18 @@
+.footer {
+  background-color: #245856;
+  color: white;
+  margin-top: 7%;
+  text-align: center;
+  padding-top: 5%;
+}
+
+.special_text {
+  color: #e8c5b0;
+  font-size: 18px;
+}
+
+.icon {
+  color: #e8c5b0;
+  font-size: 40px;
+  margin-left: 5%;
+}

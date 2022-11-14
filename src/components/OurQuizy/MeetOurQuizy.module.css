@@ -1,0 +1,10 @@
+.meet_text {
+  font-size: 66px;
+  color: #1d4645;
+  font-weight: bold;
+}
+
+.browse_button {
+  border: 1px #1d4645 solid !important;
+  border-radius: 10px !important;
+}

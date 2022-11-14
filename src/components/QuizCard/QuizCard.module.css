@@ -1,0 +1,28 @@
+.quizcard {
+  /* width: 18rem; */
+  height: 15rem;
+  background-color: #102f2e;
+  color: white;
+  align-items: center;
+  -webkit-box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+  -moz-box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+  box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+}
+
+.img {
+  margin-top: 5%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.card_title {
+  padding-top: 20%;
+}
+
+@media screen and (max-width: 524px) {
+  .lastcard {
+    margin-top: 5%;
+    color: red;
+  }
+}

@@ -1,0 +1,17 @@
+.card_categorie {
+  min-height: 17rem;
+  height: auto;
+  color: black;
+  -webkit-box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+  -moz-box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+  box-shadow: 18px 17px 53px -9px rgba(82, 82, 86, 1);
+}
+.img {
+  padding-left: 5%;
+  margin-top: 5%;
+  width: 100px;
+}
+
+.bg_FFF2E6 {
+  background-color: #fff2e6;
+}

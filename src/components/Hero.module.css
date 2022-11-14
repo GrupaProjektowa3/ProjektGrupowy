@@ -1,0 +1,86 @@
+.play {
+  color: #1d4645;
+  font-size: 4vw;
+  font-weight: bold;
+}
+
+.rank_info {
+  font-size: 1.3vw;
+}
+
+.input {
+  border-radius: 10px !important;
+  font-size: 0.97vw;
+}
+
+.button {
+  background-color: #fff2e6;
+  border-radius: 10px !important;
+  font-weight: bold;
+  font-size: 0.97vw;
+}
+
+.something {
+  font-size: 1.3vw;
+  font-weight: 400;
+}
+
+.players {
+  color: #1d4645;
+  font-size: 2.86vw;
+  font-weight: bold;
+  text-align: center;
+  font-size: 3.83vw;
+}
+
+.container {
+  margin-top: 15vh;
+}
+
+.img {
+  pointer-events: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* @media screen and (max-width: 320px) {
+  .img {
+    width: 100px;
+    height: 100px;
+  }
+} */
+
+@media screen and (max-width: 767px) {
+  .img,
+  .people_col {
+    max-width: 100%;
+    max-height: 100%;
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  /* .img {
+    max-width: 100%;
+    max-height: 100%;
+  } */
+}
+
+@media (min-width: 992px) {
+  /* .img {
+    max-width: 100%;
+    max-height: 100%;
+  } */
+}
+
+@media (min-width: 1200px) {
+  /* .img {
+    max-width: 100%;
+    max-height: 100%;
+  } */
+}
