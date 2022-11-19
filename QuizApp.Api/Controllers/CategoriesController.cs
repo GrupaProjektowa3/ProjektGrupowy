@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using QuizApp.DAL;
 using QuizApp.Model;
 
@@ -18,7 +15,7 @@ namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController: ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -27,13 +24,13 @@ namespace QuizApp.Api.Controllers
             _context = context;
         }
 
-
         // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 return Ok(await _context.Categories.ToListAsync());
             }
             catch (Exception ex)
@@ -43,27 +40,12 @@ namespace QuizApp.Api.Controllers
         }
 
         // GET: api/Categories/5
-        /*
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
-        {
-            try
-            {
-                var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-                return Ok(category);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return NotFound(ex);
-            }
-        }
-        */
-
         [HttpGet("{name}")]
         public async Task<ActionResult<Category>> GetCategory(string name)
         {
             try
             {
+                var currentUser = GetCurrentUser();
                 return Ok(_context.Categories.Where(x => x.Name.Contains(name)));
             }
             catch (ArgumentNullException ex)
@@ -72,7 +54,6 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // PUT: api/Categories/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutCategory(int id, Category category)
@@ -102,7 +83,6 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // POST: api/Categories
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
@@ -112,7 +92,7 @@ namespace QuizApp.Api.Controllers
                 var currentUser = GetCurrentUser();
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
-                return Ok("$Hi admin");
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -143,7 +123,7 @@ namespace QuizApp.Api.Controllers
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-            if(identity != null)
+            if (identity != null)
             {
                 var userClaims = identity.Claims;
 

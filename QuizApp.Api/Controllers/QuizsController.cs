@@ -15,23 +15,23 @@ namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class QuizsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public QuestionsController(ApplicationDbContext context)
+        public QuizsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Questions
+        // GET: api/Quizs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+        public async Task<ActionResult<IEnumerable<Quiz>>> GetQuizzes()
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                return Ok(await _context.Questions.ToListAsync());
+                return Ok(await _context.Quizzes.ToListAsync());
             }
             catch (Exception ex)
             {
@@ -39,41 +39,41 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // GET: api/Questions/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Question>> GetQuestion(int id)
+        // GET: api/Quizs/5
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Quiz>> GetQuiz(string name)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                var question = await _context.Questions.FirstOrDefaultAsync(x => x.Id == id);
-                return Ok(question);
+                return Ok(_context.Quizzes.Where(x => x.Name.Contains(name)));
             }
             catch (ArgumentNullException ex)
             {
                 return NotFound(ex);
             }
         }
-
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutQuestion(int id, Question question)
+        public async Task<IActionResult> PutQuiz(int id, Quiz quiz)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                Question question1 = _context.Questions.FirstOrDefault(x => x.Id == id);
-                if (question1 != null)
+                Quiz quiz1 = _context.Quizzes.FirstOrDefault(x => x.Id == id);
+                if (quiz1 != null)
                 {
-                    question1.Title = question.Title;
-                    question1.QuizId = question.QuizId;
-                    _context.Questions.Update(question1);
+                    quiz1.Name = quiz.Name;
+                    quiz1.Description = quiz.Description;
+                    quiz1.CategoryId = quiz.CategoryId;
+
+                    _context.Quizzes.Update(quiz1);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
                 else
                 {
-                    _context.Questions.Add(question);
+                    _context.Quizzes.Add(quiz);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -83,15 +83,14 @@ namespace QuizApp.Api.Controllers
                 return BadRequest(ex);
             }
         }
-
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Question>> PostQuestion(Question question)
+        public async Task<ActionResult<Quiz>> PostQuiz(Quiz quiz)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                _context.Questions.Add(question);
+                _context.Quizzes.Add(quiz);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -101,16 +100,16 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // DELETE: api/Questions/5
+        // DELETE: api/Quizs/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteQuestion(int id)
+        public async Task<IActionResult> DeleteQuiz(int id)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                var question = await _context.Questions.FirstOrDefaultAsync(x => x.Id == id);
-                _context.Questions.Remove(question);
+                var quiz = await _context.Quizzes.FirstOrDefaultAsync(x => x.Id == id);
+                _context.Quizzes.Remove(quiz);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

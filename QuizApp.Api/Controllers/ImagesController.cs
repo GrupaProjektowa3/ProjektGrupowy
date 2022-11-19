@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,24 +15,23 @@ namespace QuizApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GradesController : ControllerBase
+    public class ImagesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public GradesController(ApplicationDbContext context)
+        public ImagesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Grades
+        // GET: api/Images
         [HttpGet]
-        [Authorize(Roles = "Admin, LoggedInUser")]
-        public async Task<ActionResult<IEnumerable<Grade>>> GetGrades()
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                return Ok(await _context.Grades.ToListAsync());
+                return Ok(await _context.Images.ToListAsync());
             }
             catch (Exception ex)
             {
@@ -39,16 +39,16 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // GET: api/Grades/5
+        // GET: api/Images/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, LoggedInUser")]
-        public async Task<ActionResult<Grade>> GetGrade(int id)
+
+        public async Task<ActionResult<Image>> GetImage(int id)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == id);
-                return Ok(grade);
+                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == id);
+                return Ok(image);
             }
             catch (ArgumentNullException ex)
             {
@@ -56,35 +56,26 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // PUT: api/Grades/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutGrade(int id, Grade grade)
+        public async Task<IActionResult> PutImage(int id, Image image)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                Grade grade1 = _context.Grades.FirstOrDefault(x => x.Id == id);
-                if (grade1 != null)
+                Image image1 = _context.Images.FirstOrDefault(x => x.Id == id);
+                if (image != null)
                 {
-                    grade1.DateOfIssue = grade.DateOfIssue;
-                    grade1.GradeValue = grade.GradeValue;
-                    if (grade.CategoryId != null)
-                    {
-                        grade1.CategoryId = grade.CategoryId;
-                    }
-                    if (grade.LoggedInUserId != null)
-                    {
-                        grade1.LoggedInUserId = grade.LoggedInUserId;
-                    }
-                    _context.Grades.Update(grade);
+                    image1.Name = image.Name;
+                    image1.Description = image.Description;
+                    image1.CategoryId = image.CategoryId;
+                    _context.Images.Update(image1);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
                 else
                 {
-                    _context.Grades.Add(grade);
+                    _context.Images.Add(image);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -94,17 +85,14 @@ namespace QuizApp.Api.Controllers
                 return BadRequest(ex);
             }
         }
-
-        // POST: api/Grades
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin, LoggedInUser")]
-        public async Task<ActionResult<Grade>> PostGrade(Grade grade)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Image>> PostImage(Image image)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                _context.Grades.Add(grade);
+                _context.Images.Add(image);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -114,16 +102,16 @@ namespace QuizApp.Api.Controllers
             }
         }
 
-        // DELETE: api/Grades/5
+        // DELETE: api/Images/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteGrade(int id)
+        public async Task<IActionResult> DeleteImage(int id)
         {
             try
             {
                 var currentUser = GetCurrentUser();
-                var grade = await _context.Grades.FirstOrDefaultAsync(x => x.Id == id);
-                _context.Grades.Remove(grade);
+                var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == id);
+                _context.Images.Remove(image);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
