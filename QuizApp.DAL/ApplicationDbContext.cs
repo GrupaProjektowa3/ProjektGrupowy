@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace QuizApp.DAL
 {
-    //public class ApplicationDbContext : IdentityDbContext<User, Role, int>
     public class ApplicationDbContext : DbContext
     {
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Quiz> Quizzes { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
@@ -28,22 +29,27 @@ namespace QuizApp.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            /*
-            modelBuilder.Entity<User>()
-            .ToTable("AspNetUsers")
-            .HasDiscriminator<int>("UserType")
-            .HasValue<User>((int)RoleValue.User)
-            .HasValue<LoggedInUser>((int)RoleValue.LoggedInUser);
-            */
+            
             modelBuilder.Entity<Question>()
                 .HasMany(c => c.Answers)
                 .WithOne(x => x.Question)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Category>()
-                .HasMany(c => c.Questions)
+                .HasMany(c => c.Quizzes)
                 .WithOne(x => x.Category)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Images)
+                .WithOne(x => x.Category)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Quiz>()
+            .HasMany(c => c.Questions)
+            .WithOne(x => x.Quiz)
+    .       OnDelete(DeleteBehavior.Cascade);
+
         }
 
     }

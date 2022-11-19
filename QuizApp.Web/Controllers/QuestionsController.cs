@@ -22,7 +22,7 @@ namespace QuizApp.Web.Controllers
         // GET: Questions
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Questions.Include(q => q.Category);
+            var applicationDbContext = _context.Questions.Include(q => q.Quiz);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace QuizApp.Web.Controllers
             }
 
             var question = await _context.Questions
-                .Include(q => q.Category)
+                .Include(q => q.Quiz)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -65,7 +65,7 @@ namespace QuizApp.Web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.QuizId);
             return View(question);
         }
 
@@ -82,7 +82,7 @@ namespace QuizApp.Web.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.QuizId);
             return View(question);
         }
 
@@ -118,7 +118,7 @@ namespace QuizApp.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", question.QuizId);
             return View(question);
         }
 
@@ -131,7 +131,7 @@ namespace QuizApp.Web.Controllers
             }
 
             var question = await _context.Questions
-                .Include(q => q.Category)
+                .Include(q => q.QuizId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {

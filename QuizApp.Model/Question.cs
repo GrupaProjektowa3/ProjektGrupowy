@@ -16,9 +16,9 @@ namespace QuizApp.Model
         [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
         public virtual List<Answer> Answers { get; set; }
-        public virtual Category Category { get; set; }
-        [ForeignKey("Category")]
-        public int? CategoryId { get; set; }
+        public virtual Quiz Quiz { get; set; }
+        [ForeignKey("Quiz")]
+        public int? QuizId { get; set; }
 
     }
 }

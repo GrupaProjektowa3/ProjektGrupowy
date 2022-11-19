@@ -10,8 +10,8 @@ using QuizApp.DAL;
 namespace QuizApp.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221024011832_Init")]
-    partial class Init
+    [Migration("20221119161651_FirstInit")]
+    partial class FirstInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,9 @@ namespace QuizApp.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -56,7 +58,8 @@ namespace QuizApp.DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -82,13 +85,43 @@ namespace QuizApp.DAL.Migrations
                     b.Property<int?>("LoggedInUserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("QuizId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("LoggedInUserId");
 
+                    b.HasIndex("QuizId");
+
                     b.ToTable("Grades");
+                });
+
+            modelBuilder.Entity("QuizApp.Model.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("QuizApp.Model.LoggedInUser", b =>
@@ -99,16 +132,23 @@ namespace QuizApp.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("EmailAdress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -117,7 +157,9 @@ namespace QuizApp.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -131,18 +173,44 @@ namespace QuizApp.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int?>("QuizId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("QuizApp.Model.Quiz", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("QuizApp.Model.Answer", b =>
@@ -158,22 +226,46 @@ namespace QuizApp.DAL.Migrations
             modelBuilder.Entity("QuizApp.Model.Grade", b =>
                 {
                     b.HasOne("QuizApp.Model.Category", "Category")
-                        .WithMany("Grades")
+                        .WithMany()
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("QuizApp.Model.LoggedInUser", "LoggedInUser")
                         .WithMany("Grades")
                         .HasForeignKey("LoggedInUserId");
 
+                    b.HasOne("QuizApp.Model.Quiz", null)
+                        .WithMany("Grades")
+                        .HasForeignKey("QuizId");
+
                     b.Navigation("Category");
 
                     b.Navigation("LoggedInUser");
                 });
 
-            modelBuilder.Entity("QuizApp.Model.Question", b =>
+            modelBuilder.Entity("QuizApp.Model.Image", b =>
                 {
                     b.HasOne("QuizApp.Model.Category", "Category")
+                        .WithMany("Images")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("QuizApp.Model.Question", b =>
+                {
+                    b.HasOne("QuizApp.Model.Quiz", "Quiz")
                         .WithMany("Questions")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Quiz");
+                });
+
+            modelBuilder.Entity("QuizApp.Model.Quiz", b =>
+                {
+                    b.HasOne("QuizApp.Model.Category", "Category")
+                        .WithMany("Quizzes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -182,9 +274,9 @@ namespace QuizApp.DAL.Migrations
 
             modelBuilder.Entity("QuizApp.Model.Category", b =>
                 {
-                    b.Navigation("Grades");
+                    b.Navigation("Images");
 
-                    b.Navigation("Questions");
+                    b.Navigation("Quizzes");
                 });
 
             modelBuilder.Entity("QuizApp.Model.LoggedInUser", b =>
@@ -195,6 +287,13 @@ namespace QuizApp.DAL.Migrations
             modelBuilder.Entity("QuizApp.Model.Question", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("QuizApp.Model.Quiz", b =>
+                {
+                    b.Navigation("Grades");
+
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }
